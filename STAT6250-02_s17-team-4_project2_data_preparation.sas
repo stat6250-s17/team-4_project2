@@ -13,9 +13,9 @@ World Poll.
 [Number of Features] 12
 [Data Source] https://www.kaggle.com/unsdsn/world-happiness/downloads/2015.csv
 [Data Dictionary] https://www.kaggle.com/unsdsn/world-happiness
-[Unique ID Schema] The column "country"ù is a primary key, which is equivalent 
-to the unique ID column "country"ù in dataset Happiness2016, and also 
-equivalent to the unique ID column "country"ù in dataset SuicideRates
+[Unique ID Schema] The column "country"¬ù is a primary key, which is equivalent 
+to the unique ID column "country"¬ù in dataset Happiness2016, and also 
+equivalent to the unique ID column "country"¬ù in dataset SuicideRates
 --
 [Dataset 2 Name] Happiness2016
 [Dataset Description] The 2016 World Happiness Report is a survey of the state 
@@ -26,8 +26,8 @@ World Poll.
 [Number of Features] 13
 [Data Source] https://www.kaggle.com/unsdsn/world-happiness/downloads/2016.csv
 [Data Dictionary] https://www.kaggle.com/unsdsn/world-happiness
-[Unique ID Schema] The column "country"ù is a primary key, which is equivalent
-to the unique ID column "country"ù in dataset Happiness2015
+[Unique ID Schema] The column "country"¬ù is a primary key, which is equivalent
+to the unique ID column "country"¬ù in dataset Happiness2015
 --
 [Dataset 3 Name] HealthStats
 [Dataset Description] World Health Statistics 2016 Report, Annex B: Tables of 
@@ -40,8 +40,8 @@ http://www.who.int/entity/gho/publications/world_health_statistics/2016/whs2016_
 was downloaded and editted. Variables from years that did not include 2015 were
 deleted and variable names were created from the column headers.
 [Data Dictionary] https://github.com/stat6250/team-4_project2/blob/master/whs2016_AnnexB-edit_Data_Dictionary.rtf
-[Unique ID Schema] The column "country"ù is a primary key, which is equivalent 
-to the unique ID column "country"ù in dataset Happiness2015
+[Unique ID Schema] The column "country"¬ù is a primary key, which is equivalent 
+to the unique ID column "country"¬ù in dataset Happiness2015
 --
 [Dataset 4 Name] SuicideRates
 [Dataset Description] Age-standardized suicide rates (per 100,000 population) 
@@ -51,11 +51,12 @@ from the World Health Organization (WHO) for 2000, 2005, 2010, and 2015
 [Number of Features] 5
 [Data Source] The file 
 http://apps.who.int/gho/athena/data/GHO/MH_12?format=csv"
-was downloaded and editted to remove rows for men and women, leaving just the 
-rows for "both sexes".
+was downloaded and editted to remove rows for "Male" and "Female", leaving just
+the rows for "Both sexes". Year columns (e.g. 2015) were renamed to add a "Y" 
+(e.g. Y2015)
 [Data Dictionary] http://apps.who.int/gho/indicatorregistry/App_Main/view_indicator.aspx?iid=78
-[Unique ID Schema] The column "country"ù ù is a primary key, which is 
-equivalent to the unique ID column "country"ù ù in dataset Happiness2015
+[Unique ID Schema] The column "country"¬ù ¬ù is a primary key, which is 
+equivalent to the unique ID column "country"¬ù ¬ù in dataset Happiness2015
 ;
 
 * setup environmental parameters;
@@ -72,9 +73,9 @@ https://github.com/stat6250/team-4_project2/blob/master/data/2016.csv?raw=true
 %let inputDataset2DSN = Happiness2016_raw;
 
 %let inputDataset3URL =
-https://github.com/stat6250/team-4_project2/blob/master/data/whs2016_AnnexB-edit.xls?raw=true
+https://github.com/stat6250/team-4_project2/blob/master/data/whs2016_AnnexB-edit.csv?raw=true
 ;
-%let inputDataset3Type = XLS;
+%let inputDataset3Type = CSV;
 %let inputDataset3DSN = HealthStats_raw;
 
 %let inputDataset4URL =
@@ -134,7 +135,6 @@ https://github.com/stat6250/team-4_project2/blob/master/data/MH_12-edit.xls?raw=
     &inputDataset4Type.
 )
 
-
 * sort and check raw datasets for duplicates with respect to their unique ids,
   removing blank rows, if needed;
 proc sort
@@ -178,6 +178,24 @@ proc sort
     ;
 run;
 
+*horizontal merge of Happiness 2015, Health Statistics and Suicide Rates 
+on Country name;
+proc sql;
+    create table H2015_Health_Suicide as
+        select 
+			A.*, 
+			B.*,
+			C.Y2015 as Suicide_Rate label "Suicide_Rate"
+        from
+            Happiness2015_raw_sorted as A
+            left join
+            HealthStats_raw_sorted as B
+            on A.Country = B.Country
+			left join
+			SuicideRates_raw_sorted as C
+			on A.Country = C.Country			
+    ;
+quit;
 
 /*Combine hapiness report data vertically into one primary key,
 and retain all Happiness2015-2016 fields*/
@@ -206,8 +224,3 @@ data hapiness_yoy_report;
 		end;
 	output;
 run;
-
-
-	
-
-
