@@ -51,8 +51,9 @@ from the World Health Organization (WHO) for 2000, 2005, 2010, and 2015
 [Number of Features] 5
 [Data Source] The file 
 http://apps.who.int/gho/athena/data/GHO/MH_12?format=csv"
-was downloaded and editted to remove rows for men and women, leaving just the 
-rows for "both sexes".
+was downloaded and editted to remove rows for "Male" and "Female", leaving just
+the rows for "Both sexes". Year columns (e.g. 2015) were renamed to add a "Y" 
+(e.g. Y2015)
 [Data Dictionary] http://apps.who.int/gho/indicatorregistry/App_Main/view_indicator.aspx?iid=78
 [Unique ID Schema] The column "country"ù ù is a primary key, which is 
 equivalent to the unique ID column "country"ù ù in dataset Happiness2015
@@ -72,9 +73,9 @@ https://github.com/stat6250/team-4_project2/blob/master/data/2016.csv?raw=true
 %let inputDataset2DSN = Happiness2016_raw;
 
 %let inputDataset3URL =
-https://github.com/stat6250/team-4_project2/blob/master/data/whs2016_AnnexB-edit.xls?raw=true
+https://github.com/stat6250/team-4_project2/blob/master/data/whs2016_AnnexB-edit.csv?raw=true
 ;
-%let inputDataset3Type = XLS;
+%let inputDataset3Type = CSV;
 %let inputDataset3DSN = HealthStats_raw;
 
 %let inputDataset4URL =
@@ -134,7 +135,6 @@ https://github.com/stat6250/team-4_project2/blob/master/data/MH_12-edit.xls?raw=
     &inputDataset4Type.
 )
 
-
 * sort and check raw datasets for duplicates with respect to their unique ids,
   removing blank rows, if needed;
 proc sort
@@ -178,3 +178,21 @@ proc sort
     ;
 run;
 
+*horizontal merge of Happiness 2015, Health Statistics and Suicide Rates 
+on Country name;
+proc sql;
+    create table H2015_Health_Suicide as
+        select 
+			A.*, 
+			B.*,
+			C.Y2015 as Suicide_Rate label "Suicide_Rate"
+        from
+            Happiness2015_raw_sorted as A
+            left join
+            HealthStats_raw_sorted as B
+            on A.Country = B.Country
+			left join
+			SuicideRates_raw_sorted as C
+			on A.Country = C.Country			
+    ;
+quit;
