@@ -178,3 +178,36 @@ proc sort
     ;
 run;
 
+
+/*Combine hapiness report data vertically into one primary key,
+and retain all Happiness2015-2016 fields*/
+
+data hapiness_yoy_report;
+	retain 
+		year;
+	set 
+		Happiness2015_raw_sorted(in=happiness2015_data_row) 
+		Happiness2016_raw_sorted(in=happiness2016_data_row)
+	;
+	by 
+		Country
+	;
+	if 
+		happiness2015_data_row=1
+	then 
+		do;
+			year=2015;
+		end;
+	else if
+		happiness2016_data_row=1
+	then
+		do;
+			year=2016;
+		end;
+	output;
+run;
+
+
+	
+
+
