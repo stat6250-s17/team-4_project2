@@ -3,7 +3,7 @@
 * (set window width to banner width to calibrate line length to 80 characters *;
 *******************************************************************************;
 
-This file uses the following analytic dataset to address several research
+*This file uses the following analytic dataset to address several research
 questions regarding happiness in countries around the world.
 
 Dataset Name: H2015_Health_Suicide created in external file
@@ -28,9 +28,11 @@ X "cd ""%substr(%sysget(SAS_EXECFILEPATH),1,%eval(%length(%sysget(SAS_EXECFILEPA
 *
 Question: Which variable contributes most in predicting the happiness score? 
 
-Rationale: This will help identify what factor affects happiness the most) 
+Rationale: This will help identify what factor affects happiness the most. 
 
-Note: This will use the column Happiness_Score as the dependent variable and the rest of the variables from WorldHappiness2015 and WorldHappiness2016 as the independent variables in a multiple linear regression
+Note: This will use the column Happiness_Score as the dependent variable and 
+the rest of the variables from WorldHappiness2015 and WorldHappiness2016 as the
+independent variables in a multiple linear regression.
  
 Methodology:
 
@@ -38,6 +40,9 @@ Limitations:
 
 Followup Steps:
 ;
+proc reg data=Hapiness_yoy_report;
+	model happiness_score = GDP family life_exp freedom trust generosity;
+run;
 
 *******************************************************************************;
 * Research Question Analysis Starting Point;
@@ -45,9 +50,11 @@ Followup Steps:
 *
 Question: Is happiness inversely correlated to suicide rates? 
 
-Rationale: One would expected a happier country to have a lower suicide rate. Is this true?
+Rationale: One would expected a happier country to have a lower suicide rate. 
+Is this true?
 
-Note: This will use the column Y2015 from SuicideRates and column Happiness_Score from WorldHappiness2015.
+Note: This will use the column Y2015 from SuicideRates and column 
+Happiness_Score from WorldHappiness2015.
  
 Methodology:
 
@@ -62,9 +69,12 @@ Followup Steps:
 *
 Question: How does Total Alcohol Consumption Per Capita correlate to happiness? 
 
-Rationale: Some people drink to drown their sorrows. On the otherhand, happy people drink at celebrations. This could give insight how happiness affects drinking.
+Rationale: Some people drink to drown their sorrows. On the otherhand, happy 
+people drink at celebrations. This could give insight how happiness affects 
+drinking.
 
-Note: This will use the column Alcohol_Consumption from HealthStats and Happiness_Score from WorldHappiness2015. 
+Note: This will use the column Alcohol_Consumption from HealthStats and 
+Happiness_Score from WorldHappiness2015. 
  
 Methodology:
 
