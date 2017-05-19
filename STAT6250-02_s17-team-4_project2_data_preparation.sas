@@ -40,7 +40,8 @@ http://www.who.int/entity/gho/publications/world_health_statistics/2016/whs2016_
 was downloaded and editted. Variables from years that did not include 2015 were
 deleted and variable names were created from the column headers. Values <0.1
 were replaced with 0.0
-[Data Dictionary] https://github.com/stat6250/team-4_project2/blob/master/whs2016_AnnexB-edit_Data_Dictionary.rtf
+[Data Dictionary] 
+https://github.com/stat6250/team-4_project2/blob/master/whs2016_AnnexB-edit_Data_Dictionary.rtf
 [Unique ID Schema] The column "country" is a primary key, which is equivalent 
 to the unique ID column "country" in dataset Happiness2015
 --
@@ -201,12 +202,24 @@ quit;
 * Combine hapiness report data vertically into one primary key,
 and retain all Happiness2015-2016 fields;
 
-data hapiness_yoy_report;
+data happiness_yoy;
 	retain 
 		year;
 	set 
-		Happiness2015_raw_sorted(in=happiness2015_data_row) 
-		Happiness2016_raw_sorted(in=happiness2016_data_row)
+		Happiness2015_raw_sorted(
+			in=happiness2015_data_row
+			rename=(Economy__GDP_per_Capita_=GDP
+				Health__Life_Expectancy_=Life_Exp
+				Trust__Government_Corruption_=Trust
+			)
+		) 
+		Happiness2016_raw_sorted(
+			in=happiness2016_data_row
+			rename=(Economy__GDP_per_Capita_=GDP
+				Health__Life_Expectancy_=Life_Exp
+				Trust__Government_Corruption_=Trust
+			)
+		)
 	;
 	by 
 		Country
