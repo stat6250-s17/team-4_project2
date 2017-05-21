@@ -199,10 +199,18 @@ proc sql;
     ;
 quit;
 
-* Combine hapiness report data vertically into one primary key,
-and retain all Happiness2015-2016 fields;
+*Horizontally merge Happiness2015 and Happiness2016 by country;
+data Happiness_yoy_GDP(keep=Country Region GDP_2015 GDP_2016 GDP_increase);
+	merge Happiness2015_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP_2015))
+		  Happiness2016_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP_2016))
+	;
+	GDP_increase=(GDP_2016-GDP_2015)/GDP_2015;
+run;
 
-data happiness_yoy;
+* Combine hapiness report data vertically into the primary
+key "country";
+data happiness_yoy(drop=lower_confidence_interval
+						upper_confidence_interval);
 	retain 
 		year;
 	set 
