@@ -19,8 +19,39 @@ See included file for dataset properties
 X "cd ""%substr(%sysget(SAS_EXECFILEPATH),1,%eval(%length(%sysget(SAS_EXECFILEPATH))-%length(%sysget(SAS_EXECFILENAME))))""";
 
 
-* load external file that generates analytic dataset H2015_Health_Suicide;
+* load external file that generates analytic datasets Happiness_yoy 
+and H2015_Health_Suicide;
 %include '.\STAT6250-02_s17-team-4_project2_data_preparation.sas';
+
+
+*******************************************************************************;
+* Research Question Analysis Starting Point;
+*******************************************************************************;
+*
+Question: What are the top 20 happiest countries in 2016 and how do they
+compare to the rest of the countries?
+
+Rationale: This answers some basics questions about the results of the research.
+
+Note: This will use the Country and Happiness_Score from H2016_sorted_by_hscore.
+ 
+Methodology: Use PROC PRINT on sorted 2016 data to get the top 20 countries
+and their scores. Then use PROC SGPLOT to visuallize the happiness scores for
+all countries. 
+
+Limitations: These results are from one study and the score is an average of
+all the respondents for a country.
+
+Followup Steps:
+;
+proc print data=H2016_sorted_by_hscore(obs=20);
+	var country happiness_score;
+run;
+
+proc sgplot data=H2016_sorted_by_hscore;
+	hbar country / response=happiness_score
+		categoryorder=respdesc;
+run;
 
 *******************************************************************************;
 * Research Question Analysis Starting Point;
@@ -34,14 +65,19 @@ Note: This will use the column Happiness_Score as the dependent variable and
 the rest of the variables from WorldHappiness2015 and WorldHappiness2016 as the
 independent variables in a multiple linear regression.
  
-Methodology:
+Methodology: Use PROC REG to do a multiple linear regression. Use the p-values
+to determine which variables are significant to the model.
 
-Limitations:
+Limitations: The linear regression model assumes the relationships between
+variable to be linear.
 
 Followup Steps:
 ;
-proc reg data=Hapiness_yoy_report;
+proc reg data=Happiness_yoy;
 	model happiness_score = GDP family life_exp freedom trust generosity;
+run;
+delete generosity;
+print;
 run;
 
 *******************************************************************************;
@@ -56,12 +92,16 @@ Is this true?
 Note: This will use the column Y2015 from SuicideRates and column 
 Happiness_Score from WorldHappiness2015.
  
-Methodology:
+Methodology: Use PROC CORR to calaculate the correlation between the two 
+variables.
 
-Limitations:
+Limitations: Finding a correlation does not mean that one factor causes another.
 
 Followup Steps:
 ;
+proc corr data=H2015_health_suicide plots=matrix(histogram);
+	var happiness_score suicide_rate;
+run;
 
 *******************************************************************************;
 * Research Question Analysis Starting Point;
@@ -76,9 +116,13 @@ drinking.
 Note: This will use the column Alcohol_Consumption from HealthStats and 
 Happiness_Score from WorldHappiness2015. 
  
-Methodology:
+Methodology: Use PROC CORR to calaculate the correlation between the two 
+variables.
 
-Limitations:
+Limitations: Finding a correlation does not mean that one factor causes another.
 
 Followup Steps:
 ;
+proc corr data=H2015_health_suicide plots=matrix(histogram);
+	var happiness_score alcohol_consumption;
+run;
