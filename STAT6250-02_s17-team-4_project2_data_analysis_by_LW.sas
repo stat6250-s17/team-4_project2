@@ -76,6 +76,10 @@ footnote;
 
 
 
+*******************************************************************************;
+* Research Question Analysis Starting Point;
+*******************************************************************************;
+
 title1
 'Research Question : Is the mean happiness score significantly different across the 4 major continents in the world ?'
 ;
@@ -147,6 +151,10 @@ title;
 footnote;
 
 
+
+*******************************************************************************;
+* Research Question Analysis Starting Point;
+*******************************************************************************;
 
 title1
 'Research Question : Which variables can be used to predict the average life expectancy of each country ?'
