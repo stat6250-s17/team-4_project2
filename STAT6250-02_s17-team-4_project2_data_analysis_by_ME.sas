@@ -23,6 +23,36 @@ X "cd ""%substr(%sysget(SAS_EXECFILEPATH),1,%eval(%length(%sysget(SAS_EXECFILEPA
 and H2015_Health_Suicide;
 %include '.\STAT6250-02_s17-team-4_project2_data_preparation.sas';
 
+
+*******************************************************************************;
+* Research Question Analysis Starting Point;
+*******************************************************************************;
+*
+Question: What are the top 20 happiest countries in 2016 and how do they
+compare to the rest of the countries?
+
+Rationale: This answers some basics questions about the results of the research.
+
+Note: This will use the Country and Happiness_Score from H2016_sorted_by_hscore.
+ 
+Methodology: Use PROC PRINT on sorted 2016 data to get the top 20 countries
+and their scores. Then use PROC SGPLOT to visuallize the happiness scores for
+all countries. 
+
+Limitations: These results are from one study and the score is an average of
+all the respondents for a country.
+
+Followup Steps:
+;
+proc print data=H2016_sorted_by_hscore(obs=20);
+	var country happiness_score;
+run;
+
+proc sgplot data=H2016_sorted_by_hscore;
+	hbar country / response=happiness_score
+		categoryorder=respdesc;
+run;
+
 *******************************************************************************;
 * Research Question Analysis Starting Point;
 *******************************************************************************;

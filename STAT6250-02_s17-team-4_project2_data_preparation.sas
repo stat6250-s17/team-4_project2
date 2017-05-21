@@ -238,3 +238,12 @@ data happiness_yoy;
 		end;
 	output;
 run;
+
+proc sort
+        data=Happiness2016_raw
+        out=H2016_sorted_by_hscore
+    ;
+    by
+        descending happiness_score
+    ;
+run;
