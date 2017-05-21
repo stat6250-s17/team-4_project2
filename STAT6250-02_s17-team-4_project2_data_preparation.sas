@@ -247,3 +247,11 @@ data happiness_yoy(drop=lower_confidence_interval
 	output;
 run;
 
+proc sort
+        data=Happiness2016_raw
+        out=H2016_sorted_by_hscore
+    ;
+    by
+        descending happiness_score
+    ;
+run;
