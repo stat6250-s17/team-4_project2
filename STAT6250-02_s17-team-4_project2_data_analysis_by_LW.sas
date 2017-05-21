@@ -37,6 +37,13 @@ title2
 ;
 
 *
+Research Question : What are the top 20 countries with the fastest GDP 
+increase ? Which region contributes the largest number of countries among 
+the top 20 ?
+
+Rationale : This gives us an insight into the economic growth of 
+countries and regions that are developing rapidly in recent two years.
+
 Methodology : Use "proc sort" to arrange the variable "GDP_increase" in 
 descending order, and then use the "obs=" option in "proc print" to only 
 display the top 20 countries with fastest GDP increase. Use "proc freq" 
@@ -45,6 +52,8 @@ to calculate the frequency that each region accounts.
 Limitations : Some countries like Congo(Kinsha) and Zimbabwe have 0 GDP value
 in these two years. As a result, the combined dataset contains missing value
 for the new calculated variable GDP_increase when "merge" statement is used.
+
+Followup Steps : Handle with missing values.
 ;
 
 proc sort data=Happiness_yoy_GDP out=GDP_sorted;
@@ -76,6 +85,13 @@ title2
 ;
 
 *
+Research Question : Is the mean happiness score significantly 
+different across the 4 major continents in the world ?
+
+Rationale : This studies the difference in happiness_score index 
+by continents, which reflects a worldwide unequal development 
+in the standard of living.
+
 Methodology : Use "proc format" to categorize the variable "region" 
 into 4 groups including "Europe","Asia and Pacific","America","Africa",
 and then use "proc glm" to perform one-way ANOVA on the response 
@@ -87,6 +103,9 @@ or regions. We do not have information from other places, which might have
 a great influence on the conclusion once their data is added. Hence this 
 can only be used to roughly predict people's feeling of happiness on a 
 global scale.
+
+Followup Steps : Check model assumptions, and if it failed, alternative
+models should be considered.
 ;
 
 proc freq data=happiness_yoy;
@@ -138,12 +157,20 @@ title2
 ;
 
 *
+Research Question : Which variables can be used to predict the average 
+life expectancy of each country ?
+
+Rationale : This helps us build up a model by which we are able to 
+calculate the life expectancy once adequate information is obtained.
+
 Methodology : Use "proc reg" to perform a multiple regression model
 to see which independent variables including "Economy__GDP_per_Capita_",
 "Alcohol_Consumption","Health","Sanitation","Suicide_Rate" are significant.
 
 Limitations : Missing values are present in some of these variables
 for particular countries.
+
+Followup Steps : Handle with missing values.
 ;
 
 proc reg data=H2015_health_suicide;
