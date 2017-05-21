@@ -13,9 +13,9 @@ World Poll.
 [Number of Features] 12
 [Data Source] https://www.kaggle.com/unsdsn/world-happiness/downloads/2015.csv
 [Data Dictionary] https://www.kaggle.com/unsdsn/world-happiness
-[Unique ID Schema] The column "country" is a primary key, which is equivalent 
-to the unique ID column "country" in dataset Happiness2016, and also 
-equivalent to the unique ID column "country" in dataset SuicideRates
+[Unique ID Schema] The column "country"Â is a primary key, which is equivalent 
+to the unique ID column "country"Â in dataset Happiness2016, and also 
+equivalent to the unique ID column "country"Â in dataset SuicideRates
 --
 [Dataset 2 Name] Happiness2016
 [Dataset Description] The 2016 World Happiness Report is a survey of the state 
@@ -26,8 +26,8 @@ World Poll.
 [Number of Features] 13
 [Data Source] https://www.kaggle.com/unsdsn/world-happiness/downloads/2016.csv
 [Data Dictionary] https://www.kaggle.com/unsdsn/world-happiness
-[Unique ID Schema] The column "country" is a primary key, which is equivalent
-to the unique ID column "country" in dataset Happiness2015
+[Unique ID Schema] The column "country"Â is a primary key, which is equivalent
+to the unique ID column "country"Â in dataset Happiness2015
 --
 [Dataset 3 Name] HealthStats
 [Dataset Description] World Health Statistics 2016 Report, Annex B: Tables of 
@@ -42,8 +42,8 @@ deleted and variable names were created from the column headers. Values <0.1
 were replaced with 0.0
 [Data Dictionary] 
 https://github.com/stat6250/team-4_project2/blob/master/whs2016_AnnexB-edit_Data_Dictionary.rtf
-[Unique ID Schema] The column "country" is a primary key, which is equivalent 
-to the unique ID column "country" in dataset Happiness2015
+[Unique ID Schema] The column "country"Â is a primary key, which is equivalent 
+to the unique ID column "country"Â in dataset Happiness2015
 --
 [Dataset 4 Name] SuicideRates
 [Dataset Description] Age-standardized suicide rates (per 100,000 population) 
@@ -57,8 +57,8 @@ was downloaded and editted to remove rows for "Male" and "Female", leaving just
 the rows for "Both sexes". Year columns (e.g. 2015) were renamed to add a "Y" 
 (e.g. Y2015)
 [Data Dictionary] http://apps.who.int/gho/indicatorregistry/App_Main/view_indicator.aspx?iid=78
-[Unique ID Schema] The column "country" is a primary key, which is 
-equivalent to the unique ID column "country" in dataset Happiness2015
+[Unique ID Schema] The column "country"Â is a primary key, which is 
+equivalent to the unique ID column "country"ÂÂ in dataset Happiness2015
 ;
 
 * setup environmental parameters;
@@ -199,10 +199,18 @@ proc sql;
     ;
 quit;
 
-* Combine hapiness report data vertically into one primary key,
-and retain all Happiness2015-2016 fields;
+*Horizontally merge Happiness2015 and Happiness2016 by country;
+data Happiness_yoy_GDP(keep=Country Region GDP_2015 GDP_2016 GDP_increase);
+	merge Happiness2015_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP_2015))
+		  Happiness2016_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP_2016))
+	;
+	GDP_increase=(GDP_2016-GDP_2015)/GDP_2015;
+run;
 
-data happiness_yoy;
+* Combine hapiness report data vertically into the primary
+key "country";
+data happiness_yoy(drop=lower_confidence_interval
+						upper_confidence_interval);
 	retain 
 		year;
 	set 
