@@ -37,10 +37,10 @@ title2
 ;
 
 *
-Methodology : Use "proc sort" to arrange the variable "GDP_increase" in descending
-order, and then use the "obs=" option in "proc print" to only display the top
-20 countries with fastest GDP increase. Use "proc freq" to calculate the frequency
-that each region accounts. 
+Methodology : Use "proc sort" to arrange the variable "GDP_increase" in 
+descending order, and then use the "obs=" option in "proc print" to only 
+display the top 20 countries with fastest GDP increase. Use "proc freq" 
+to calculate the frequency that each region accounts. 
 
 Limitations : Some countries like Congo(Kinsha) and Zimbabwe have 0 GDP value
 in these two years. As a result, the combined dataset contains missing value
@@ -130,29 +130,33 @@ footnote;
 
 
 title1
-'Research Question : Which variables can be used to predict the Happiness_score of a country ?'
+'Research Question : Which variables can be used to predict the average life expectancy of each country ?'
 ;
 
 title2
-'Rationale : This helps us build up a model by which we are able to calculate the Happiness_score once adequate information is obtained.'
+'Rationale : This helps us build up a model by which we are able to calculate the life expectancy once adequate information is obtained.'
 ;
 
 *
 Methodology : Use "proc reg" to perform a multiple regression model
-to see which independent variables including "GDP","Life_Exp",
-"Freedom","Trust" are significant.
+to see which independent variables including "Economy__GDP_per_Capita_",
+"Alcohol_Consumption","Health","Sanitation","Suicide_Rate" are significant.
 
 Limitations : Missing values are present in some of these variables
 for particular countries.
 ;
 
-proc reg data=Happiness_yoy;
-	model Happiness_score=GDP Life_Exp Freedom Trust;
+proc reg data=H2015_health_suicide;
+	model 
+		Life_Exp=Economy__GDP_per_Capita_ 
+				 Alcohol_Consumption 
+			     Health
+				 Sanitation
+				 Suicide_Rate
+	;
 run;
 title;
 footnote;
-
-
 
 
 
