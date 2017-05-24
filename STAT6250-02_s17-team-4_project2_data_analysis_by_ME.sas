@@ -39,18 +39,18 @@ Methodology: Use PROC PRINT on sorted 2016 data to get the top 20 countries
 and their scores. Then use PROC SGPLOT to visuallize the happiness scores for
 all countries. 
 
-Limitations: These results are from one study and the score is an average of
-all the respondents for a country.
+Limitations: These results are from one study which surveyed 157-158 countries
+(out of 206 according the the UN).
 
-Followup Steps:
+Followup Steps: Look for other data sources.
 ;
 proc print data=H2016_sorted_by_hscore(obs=20);
-	var country happiness_score;
+    var country happiness_score;
 run;
 
 proc sgplot data=H2016_sorted_by_hscore;
-	hbar country / response=happiness_score
-		categoryorder=respdesc;
+    hbar country / response=happiness_score
+        categoryorder=respdesc;
 run;
 
 *******************************************************************************;
@@ -68,16 +68,13 @@ independent variables in a multiple linear regression.
 Methodology: Use PROC REG to do a multiple linear regression. Use the p-values
 to determine which variables are significant to the model.
 
-Limitations: The linear regression model assumes the relationships between
-variable to be linear.
+Limitations: The regression model only looks at independent variables from the
+happiness report.
 
-Followup Steps:
+Followup Steps: Re-run the regression with additional independent variables.
 ;
 proc reg data=Happiness_yoy;
-	model happiness_score = GDP family life_exp freedom trust generosity;
-run;
-delete generosity;
-print;
+    model happiness_score = GDP family life_exp freedom trust;
 run;
 
 *******************************************************************************;
@@ -95,12 +92,13 @@ Happiness_Score from WorldHappiness2015.
 Methodology: Use PROC CORR to calaculate the correlation between the two 
 variables.
 
-Limitations: Finding a correlation does not mean that one factor causes another.
+Limitations: The happiness score is an average by country. This may mask any
+correlation between happiness and suicide rates.
 
-Followup Steps:
+Followup Steps: Look for and analyze data collected on individuals.
 ;
 proc corr data=H2015_health_suicide plots=matrix(histogram);
-	var happiness_score suicide_rate;
+    var happiness_score suicide_rate;
 run;
 
 *******************************************************************************;
@@ -116,13 +114,14 @@ drinking.
 Note: This will use the column Alcohol_Consumption from HealthStats and 
 Happiness_Score from WorldHappiness2015. 
  
-Methodology: Use PROC CORR to calaculate the correlation between the two 
+Methodology: Use PROC CORR to calculate the correlation between the two 
 variables.
 
-Limitations: Finding a correlation does not mean that one factor causes another.
+Limitations: The correlation between happiness and alcohol maybe be weak.
 
-Followup Steps:
+Followup Steps: Try binning the alcohol consumpution into categories (high,
+medium, low)
 ;
 proc corr data=H2015_health_suicide plots=matrix(histogram);
-	var happiness_score alcohol_consumption;
+    var happiness_score alcohol_consumption;
 run;
