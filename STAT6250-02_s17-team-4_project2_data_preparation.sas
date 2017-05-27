@@ -61,6 +61,29 @@ the rows for "Both sexes". Year columns (e.g. 2015) were renamed to add a "Y"
 equivalent to the unique ID column "country" in dataset Happiness2015
 ;
 
+
+
+* environmental setup;
+
+* create output formats;
+
+proc format;
+	value $region_group
+	"Central and Eastern Europe"="Europe"
+	"Western Europe"="Europe"
+	"Australia and New Zealand"="Asia and Pacific"
+	"Eastern Asia"="Asia and Pacific"
+	"Southeastern Asia"="Asia and Pacific"
+	"Southern Asia"="Asia and Pacific"
+	"Latin America and Caribbean"="America"
+	"North America"="America"
+	"Middle East and Northern Africa"="Africa"
+	"Sub-Saharan Africa"="Africa"
+	;
+run;
+
+
+
 * setup environmental parameters;
 %let inputDataset1URL =
 https://github.com/stat6250/team-4_project2/blob/master/data/2015.csv?raw=true
@@ -137,6 +160,8 @@ https://github.com/stat6250/team-4_project2/blob/master/data/MH_12-edit.xls?raw=
     &inputDataset4Type.
 )
 
+
+
 * Sort and check raw datasets for duplicates with respect to their unique ids,
   removing blank rows, if needed;
 proc sort
@@ -167,7 +192,7 @@ proc sort
         nodupkey
         data=HealthStats_raw
         dupout=HealthStats_raw_dups
-        out=HealthStats_raw_sorted
+        out=HealthStats_raw_sorted(rename=(Life_Exp=Age_Expectancy))
     ;
     by
         Country
@@ -184,6 +209,8 @@ proc sort
     ;
 run;
 
+
+
 * Horizontal merge of Happiness 2015, Health Statistics and Suicide Rates 
 on Country name
 NOTE: Life_Exp exists in both Happiness2015 and Health Statistics
@@ -192,8 +219,8 @@ proc sql;
     create table H2015_Health_Suicide as
         select 
 			A.*, 
-			B.Life_Exp, B.alcohol_consumption, B.health, B.sanitation,
-			C.Y2015 as Suicide_Rate"
+			B.Age_Expectancy, B.alcohol_consumption, B.health, B.sanitation,
+			C.Y2015 as Suicide_Rate label "Suicide_Rate"
         from
             Happiness2015_raw_sorted as A
             left join
@@ -205,16 +232,23 @@ proc sql;
     ;
 quit;
 
+
+
 *Horizontally merge Happiness2015 and Happiness2016 by country;
+
 data Happiness_yoy_GDP(keep=Country Region GDP_2015 GDP_2016 GDP_increase);
 	merge Happiness2015_raw_sorted(rename=(GDP=GDP_2015))
 		  Happiness2016_raw_sorted(rename=(GDP=GDP_2016))
 	;
+	by country;
 	GDP_increase=(GDP_2016-GDP_2015)/GDP_2015;
 run;
 
+
+
 * Combine hapiness report data vertically into the primary
 key "country";
+
 data happiness_yoy(drop=lower_confidence_interval
 						upper_confidence_interval);
 	retain 
@@ -245,6 +279,11 @@ data happiness_yoy(drop=lower_confidence_interval
 	output;
 run;
 
+
+
+*Use proc sort and data step to further make changes
+on the datasets for analysis;
+
 proc sort
         data=Happiness2016_raw
         out=H2016_sorted_by_hscore
@@ -253,3 +292,18 @@ proc sort
         descending happiness_score
     ;
 run;
+
+proc sort data=Happiness_yoy_GDP out=GDP_sorted;
+	by descending GDP_increase;
+run;
+
+data top20_GDP_increase;
+	set GDP_sorted (firstobs=1 obs=20);
+run;
+
+data happiness_yoy_continents;
+	set happiness_yoy;
+	format region region_group.;
+run;
+
+
