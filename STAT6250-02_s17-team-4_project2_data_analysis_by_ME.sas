@@ -27,12 +27,19 @@ and H2015_Health_Suicide;
 *******************************************************************************;
 * Research Question Analysis Starting Point;
 *******************************************************************************;
+title1
+'Research Question: What are the top 20 happiest countries in 2016?'
+;
+
+title2
+'Rationale: This answers some basics questions about the results of the research.'
+;
+
+footnote1
+''
+;
+
 *
-Question: What are the top 20 happiest countries in 2016 and how do they
-compare to the rest of the countries?
-
-Rationale: This answers some basics questions about the results of the research.
-
 Note: This will use the Country and Happiness_Score from H2016_sorted_by_hscore.
  
 Methodology: Use PROC PRINT on sorted 2016 data to get the top 20 countries
@@ -46,21 +53,36 @@ Followup Steps: Look for other data sources.
 ;
 proc print data=H2016_sorted_by_hscore(obs=20);
     var country happiness_score;
+	label happiness_score="Happiness Score";
 run;
 
+title
+'Happiness Scores by Country'
+;
 proc sgplot data=H2016_sorted_by_hscore;
     hbar country / response=happiness_score
         categoryorder=respdesc;
 run;
 
+title;
+footnote;
+
 *******************************************************************************;
 * Research Question Analysis Starting Point;
 *******************************************************************************;
+title1
+'Research Question: Which variable contributes most in predicting the happiness score?'
+;
+
+title2
+'Rationale: This will help identify what factor affects happiness the most.'
+;
+
+footnote1
+''
+;
+
 *
-Question: Which variable contributes most in predicting the happiness score? 
-
-Rationale: This will help identify what factor affects happiness the most. 
-
 Note: This will use the column Happiness_Score as the dependent variable and 
 the rest of the variables from WorldHappiness2015 and WorldHappiness2016 as the
 independent variables in a multiple linear regression.
@@ -77,15 +99,25 @@ proc reg data=Happiness_yoy;
     model happiness_score = GDP family life_exp freedom trust;
 run;
 
+title;
+footnote;
+
 *******************************************************************************;
 * Research Question Analysis Starting Point;
 *******************************************************************************;
+title1
+'Research Question: Is happiness inversely correlated to suicide rates?'
+;
+
+title2
+'Rationale: One would expected a happier country to have a lower suicide rate. Is this true?'
+;
+
+footnote1
+''
+;
+
 *
-Question: Is happiness inversely correlated to suicide rates? 
-
-Rationale: One would expected a happier country to have a lower suicide rate. 
-Is this true?
-
 Note: This will use the column Y2015 from SuicideRates and column 
 Happiness_Score from WorldHappiness2015.
  
@@ -101,16 +133,25 @@ proc corr data=H2015_health_suicide plots=matrix(histogram);
     var happiness_score suicide_rate;
 run;
 
+title;
+footnote;
+
 *******************************************************************************;
 * Research Question Analysis Starting Point;
 *******************************************************************************;
+title1
+'Research Question: How does Total Alcohol Consumption Per Capita correlate to happiness?'
+;
+
+title2
+'Rationale: Some people drink to drown their sorrows. On the otherhand, happy people drink at celebrations. This could give insight how happiness affects drinking.'
+;
+
+footnote1
+''
+;
+
 *
-Question: How does Total Alcohol Consumption Per Capita correlate to happiness? 
-
-Rationale: Some people drink to drown their sorrows. On the otherhand, happy 
-people drink at celebrations. This could give insight how happiness affects 
-drinking.
-
 Note: This will use the column Alcohol_Consumption from HealthStats and 
 Happiness_Score from WorldHappiness2015. 
  
@@ -125,3 +166,6 @@ medium, low)
 proc corr data=H2015_health_suicide plots=matrix(histogram);
     var happiness_score alcohol_consumption;
 run;
+
+title;
+footnote;
