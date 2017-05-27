@@ -36,6 +36,18 @@ title2
 'Rationale : This gives us an insight into the economic growth of countries and regions that are developing rapidly in recent two years.'
 ;
 
+footnote1
+'Malawi has the largest rate at a 443% GDP increase from 2015-2016, followed by Burundi at a 346% increase. Tajikistan ranks at 20th, with a 25% increase in GDP.'
+;
+
+footnote2
+'The frequency table indicates that 16 out of top 20 countries with the fastest GDP_increase are located in the Sub-Saharan Africa region.'
+;
+
+footnote3
+'The reason why Sub-Saharan Africa countries have fastest GDP_increase is that their 2015 GDP is at a very low level. Therefore, the potential for those countries to expand their economy in the subsequent year is huge.'
+;
+
 *
 Research Question : What are the top 20 countries with the fastest GDP 
 increase ? Which region contributes the largest number of countries among 
@@ -56,16 +68,8 @@ for the new calculated variable GDP_increase when "merge" statement is used.
 Followup Steps : Handle with missing values.
 ;
 
-proc sort data=Happiness_yoy_GDP out=GDP_sorted;
-	by descending GDP_increase;
-run;
-
 proc print data=GDP_sorted (obs=20);
 	var country region GDP_increase;
-run;
-
-data top20_GDP_increase;
-	set GDP_sorted (firstobs=1 obs=20);
 run;
 
 proc freq data=top20_GDP_increase;
@@ -86,6 +90,18 @@ title1
 
 title2
 'Rationale : This studies the difference in happiness_score index by continents, which reflects a worldwide unequal development in the standard of living.'
+;
+
+footnote1
+'Side-by-side boxplots indicate the average happiness_scores in America and Europe are higher that in Asia Pacific and Africa.'
+;
+
+footnote2
+'The multiple comparison procedure (LSD) shows that the difference between the happiness_score in America and Europe is not significant. They both have a higher happiness_score than that in the Asia and Pacific region. The happiness_score in Africa is lower than any of the other major continents.'
+;
+
+footnote3
+'The levene test indicates the homogeneity of variance assumption is valid by having a p-value at 0.2637. However, several outliers are spotted in the boxplot, and the shapiro test for residuals normality has a p-value at 0.0007. A further step of removing outliers should be considered in order to validate the model.'
 ;
 
 *
@@ -111,30 +127,6 @@ global scale.
 Followup Steps : Check model assumptions, and if it failed, alternative
 models should be considered.
 ;
-
-proc freq data=happiness_yoy;
-	table region;
-run;
-
-proc format;
-	value $region_group
-	"Central and Eastern Europe"="Europe"
-	"Western Europe"="Europe"
-	"Australia and New Zealand"="Asia and Pacific"
-	"Eastern Asia"="Asia and Pacific"
-	"Southeastern Asia"="Asia and Pacific"
-	"Southern Asia"="Asia and Pacific"
-	"Latin America and Caribbean"="America"
-	"North America"="America"
-	"Middle East and Northern Africa"="Africa"
-	"Sub-Saharan Africa"="Africa"
-	;
-run;
-
-data happiness_yoy_continents;
-	set happiness_yoy;
-	format region region_group.;
-run;
 
 proc glm data=happiness_yoy_continents;
 	class region;
@@ -183,11 +175,8 @@ Followup Steps : Handle with missing values.
 
 proc reg data=H2015_health_suicide;
 	model 
-		Life_Exp=Economy__GDP_per_Capita_ 
-				 Alcohol_Consumption 
-			     Health
-				 Sanitation
-				 Suicide_Rate
+		Age_Expectancy=GDP Alcohol_Consumption Health 
+	Sanitation Suicide_Rate
 	;
 run;
 title;
