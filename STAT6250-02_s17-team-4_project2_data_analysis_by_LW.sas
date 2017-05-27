@@ -49,13 +49,6 @@ footnote3
 ;
 
 *
-Research Question : What are the top 20 countries with the fastest GDP 
-increase ? Which region contributes the largest number of countries among 
-the top 20 ?
-
-Rationale : This gives us an insight into the economic growth of 
-countries and regions that are developing rapidly in recent two years.
-
 Methodology : Use "proc sort" to arrange the variable "GDP_increase" in 
 descending order, and then use the "obs=" option in "proc print" to only 
 display the top 20 countries with fastest GDP increase. Use "proc freq" 
@@ -105,13 +98,6 @@ footnote3
 ;
 
 *
-Research Question : Is the mean happiness score significantly 
-different across the 4 major continents in the world ?
-
-Rationale : This studies the difference in happiness_score index 
-by continents, which reflects a worldwide unequal development 
-in the standard of living.
-
 Methodology : Use "proc format" to categorize the variable "region" 
 into 4 groups including "Europe","Asia and Pacific","America","Africa",
 and then use "proc glm" to perform one-way ANOVA on the response 
@@ -156,13 +142,19 @@ title2
 'Rationale : This helps us build up a model by which we are able to calculate the life expectancy once adequate information is obtained.'
 ;
 
+footnote1
+'In the output, GDP, Sanitation, Suicide_rate are the significant predictors for the response variable Age_Expectancy. Adjusted R-square is 0.8104, meaning that 81% of variation in the response variable can be explained from this regression model.'
+;
+
+footnote2
+'In the diagnostic pltos, the residual points against all the predictors are randomly dispersed around the horizontal axis, and the model could be a good fit for the regressional analysis of Age_Expectancy.'
+;
+
+footnote3
+'The model discussed above is just the additive model for regression. Thus, the interaction model should be further assessed. A model comparison could be used to determine the best fit of this regressional analysis.'
+;
+
 *
-Research Question : Which variables can be used to predict the average 
-life expectancy of each country ?
-
-Rationale : This helps us build up a model by which we are able to 
-calculate the life expectancy once adequate information is obtained.
-
 Methodology : Use "proc reg" to perform a multiple regression model
 to see which independent variables including "Economy__GDP_per_Capita_",
 "Alcohol_Consumption","Health","Sanitation","Suicide_Rate" are significant.

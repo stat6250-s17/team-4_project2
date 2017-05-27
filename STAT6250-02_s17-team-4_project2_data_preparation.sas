@@ -220,7 +220,7 @@ proc sql;
         select 
 			A.*, 
 			B.Age_Expectancy, B.alcohol_consumption, B.health, B.sanitation,
-			C.Y2015 label "Suicide_Rate"
+			C.Y2015 as Suicide_Rate label "Suicide_Rate"
         from
             Happiness2015_raw_sorted as A
             left join
