@@ -13,9 +13,9 @@ World Poll.
 [Number of Features] 12
 [Data Source] https://www.kaggle.com/unsdsn/world-happiness/downloads/2015.csv
 [Data Dictionary] https://www.kaggle.com/unsdsn/world-happiness
-[Unique ID Schema] The column "country" is a primary key, which is equivalent 
-to the unique ID column "country" in dataset Happiness2016, and also 
-equivalent to the unique ID column "country" in dataset SuicideRates
+[Unique ID Schema] The column "country" is a primary key, which is equivalent 
+to the unique ID column "country" in dataset Happiness2016, and also 
+equivalent to the unique ID column "country" in dataset SuicideRates
 --
 [Dataset 2 Name] Happiness2016
 [Dataset Description] The 2016 World Happiness Report is a survey of the state 
@@ -26,8 +26,8 @@ World Poll.
 [Number of Features] 13
 [Data Source] https://www.kaggle.com/unsdsn/world-happiness/downloads/2016.csv
 [Data Dictionary] https://www.kaggle.com/unsdsn/world-happiness
-[Unique ID Schema] The column "country" is a primary key, which is equivalent
-to the unique ID column "country" in dataset Happiness2015
+[Unique ID Schema] The column "country" is a primary key, which is equivalent
+to the unique ID column "country" in dataset Happiness2015
 --
 [Dataset 3 Name] HealthStats
 [Dataset Description] World Health Statistics 2016 Report, Annex B: Tables of 
@@ -42,8 +42,8 @@ deleted and variable names were created from the column headers. Values <0.1
 were replaced with 0.0
 [Data Dictionary] 
 https://github.com/stat6250/team-4_project2/blob/master/whs2016_AnnexB-edit_Data_Dictionary.rtf
-[Unique ID Schema] The column "country" is a primary key, which is equivalent 
-to the unique ID column "country" in dataset Happiness2015
+[Unique ID Schema] The column "country" is a primary key, which is equivalent 
+to the unique ID column "country" in dataset Happiness2015
 --
 [Dataset 4 Name] SuicideRates
 [Dataset Description] Age-standardized suicide rates (per 100,000 population) 
@@ -57,8 +57,8 @@ was downloaded and editted to remove rows for "Male" and "Female", leaving just
 the rows for "Both sexes". Year columns (e.g. 2015) were renamed to add a "Y" 
 (e.g. Y2015)
 [Data Dictionary] http://apps.who.int/gho/indicatorregistry/App_Main/view_indicator.aspx?iid=78
-[Unique ID Schema] The column "country" is a primary key, which is 
-equivalent to the unique ID column "country" in dataset Happiness2015
+[Unique ID Schema] The column "country"� is a primary key, which is 
+equivalent to the unique ID column "country" in dataset Happiness2015
 ;
 
 * setup environmental parameters;
@@ -143,7 +143,9 @@ proc sort
         nodupkey
         data=Happiness2015_raw
         dupout=Happiness2015_raw_dups
-        out=Happiness2015_raw_sorted
+        out=Happiness2015_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP
+				Health__Life_Expectancy_=Life_Exp
+				Trust__Government_Corruption_=Trust))
     ;
     by
         Country
@@ -153,7 +155,9 @@ proc sort
         nodupkey
         data=Happiness2016_raw
         dupout=Happiness2016_raw_dups
-        out=Happiness2016_raw_sorted
+        out=Happiness2016_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP
+				Health__Life_Expectancy_=Life_Exp
+				Trust__Government_Corruption_=Trust))
     ;
     by
         Country
@@ -181,13 +185,15 @@ proc sort
 run;
 
 * Horizontal merge of Happiness 2015, Health Statistics and Suicide Rates 
-on Country name;
+on Country name
+NOTE: Life_Exp exists in both Happiness2015 and Health Statistics
+;
 proc sql;
     create table H2015_Health_Suicide as
         select 
 			A.*, 
-			B.*,
-			C.Y2015 as Suicide_Rate label "Suicide_Rate"
+			B.Life_Exp, B.alcohol_consumption, B.health, B.sanitation,
+			C.Y2015 as Suicide_Rate"
         from
             Happiness2015_raw_sorted as A
             left join
@@ -201,8 +207,8 @@ quit;
 
 *Horizontally merge Happiness2015 and Happiness2016 by country;
 data Happiness_yoy_GDP(keep=Country Region GDP_2015 GDP_2016 GDP_increase);
-	merge Happiness2015_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP_2015))
-		  Happiness2016_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP_2016))
+	merge Happiness2015_raw_sorted(rename=(GDP=GDP_2015))
+		  Happiness2016_raw_sorted(rename=(GDP=GDP_2016))
 	;
 	GDP_increase=(GDP_2016-GDP_2015)/GDP_2015;
 run;
@@ -216,17 +222,9 @@ data happiness_yoy(drop=lower_confidence_interval
 	set 
 		Happiness2015_raw_sorted(
 			in=happiness2015_data_row
-			rename=(Economy__GDP_per_Capita_=GDP
-				Health__Life_Expectancy_=Life_Exp
-				Trust__Government_Corruption_=Trust
-			)
 		) 
 		Happiness2016_raw_sorted(
 			in=happiness2016_data_row
-			rename=(Economy__GDP_per_Capita_=GDP
-				Health__Life_Expectancy_=Life_Exp
-				Trust__Government_Corruption_=Trust
-			)
 		)
 	;
 	by 
