@@ -135,11 +135,11 @@ footnote;
 *******************************************************************************;
 
 title1
-'Research Question : Which variables can be used to predict the average life expectancy of each country ?'
+'Research Question : Which variables can be used to predict the average Age expectancy of each country ?'
 ;
 
 title2
-'Rationale : This helps us build up a model by which we are able to calculate the life expectancy once adequate information is obtained.'
+'Rationale : This helps us build up a model by which we are able to calculate the Age expectancy once adequate information is obtained.'
 ;
 
 footnote1
@@ -156,7 +156,7 @@ footnote3
 
 *
 Methodology : Use "proc reg" to perform a multiple regression model
-to see which independent variables including "Economy__GDP_per_Capita_",
+to see which independent variables including "GDP", 
 "Alcohol_Consumption","Health","Sanitation","Suicide_Rate" are significant.
 
 Limitations : Missing values are present in some of these variables
