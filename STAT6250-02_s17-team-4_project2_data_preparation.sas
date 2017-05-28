@@ -169,7 +169,7 @@ proc sort
         data=Happiness2015_raw
         dupout=Happiness2015_raw_dups
         out=Happiness2015_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP
-				Health__Life_Expectancy_=Life_Exp
+				Health__Life_Expectancy_=Life_Exp_Index
 				Trust__Government_Corruption_=Trust))
     ;
     by
@@ -181,7 +181,7 @@ proc sort
         data=Happiness2016_raw
         dupout=Happiness2016_raw_dups
         out=Happiness2016_raw_sorted(rename=(Economy__GDP_per_Capita_=GDP
-				Health__Life_Expectancy_=Life_Exp
+				Health__Life_Expectancy_=Life_Exp_Index
 				Trust__Government_Corruption_=Trust))
     ;
     by
@@ -285,12 +285,9 @@ run;
 on the datasets for analysis;
 
 proc sort
-        data=Happiness2016_raw
-        out=H2016_sorted_by_hscore
-    ;
-    by
-        descending happiness_score
-    ;
+    data=Happiness2016_raw_sorted
+    out=H2016_sorted_by_hscore;
+    by descending happiness_score;
 run;
 
 proc sort data=Happiness_yoy_GDP out=GDP_sorted;
