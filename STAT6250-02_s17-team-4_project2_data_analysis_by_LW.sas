@@ -135,19 +135,19 @@ footnote;
 *******************************************************************************;
 
 title1
-'Research Question : Which variables can be used to predict the average Age expectancy of each country ?'
+'Research Question : Which variables can be used to predict the average life expectancy of each country ?'
 ;
 
 title2
-'Rationale : This helps us build up a model by which we are able to calculate the Age expectancy once adequate information is obtained.'
+'Rationale : This helps us build up a model by which we are able to calculate the life expectancy once adequate information is obtained.'
 ;
 
 footnote1
-'In the output, GDP, Sanitation, Suicide_rate are the significant predictors for the response variable Age_Expectancy. Adjusted R-square is 0.8104, meaning that 81% of variation in the response variable can be explained from this regression model.'
+'In the output, GDP, Sanitation, Suicide_rate are the significant predictors for the response variable Life_Expectancy. Adjusted R-square is 0.8104, meaning that 81% of variation in the response variable can be explained from this regression model.'
 ;
 
 footnote2
-'In the diagnostic pltos, the residual points against all the predictors are randomly dispersed around the horizontal axis, and the model could be a good fit for the regressional analysis of Age_Expectancy.'
+'In the diagnostic pltos, the residual points against all the predictors are randomly dispersed around the horizontal axis, and the model could be a good fit for the regressional analysis of Life_Expectancy.'
 ;
 
 footnote3
@@ -167,7 +167,7 @@ Followup Steps : Handle with missing values.
 
 proc reg data=H2015_health_suicide;
 	model 
-		Age_Expectancy=GDP Alcohol_Consumption Health 
+		Life_Expectancy=GDP Alcohol_Consumption Health 
 	Sanitation Suicide_Rate
 	;
 run;
