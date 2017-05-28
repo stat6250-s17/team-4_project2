@@ -192,7 +192,7 @@ proc sort
         nodupkey
         data=HealthStats_raw
         dupout=HealthStats_raw_dups
-        out=HealthStats_raw_sorted(rename=(Life_Exp=Age_Expectancy))
+        out=HealthStats_raw_sorted(rename=(Life_Exp=Life_Expectancy))
     ;
     by
         Country
@@ -219,7 +219,7 @@ proc sql;
     create table H2015_Health_Suicide as
         select 
 			A.*, 
-			B.Age_Expectancy, B.alcohol_consumption, B.health, B.sanitation,
+			B.Life_Expectancy, B.alcohol_consumption, B.health, B.sanitation,
 			C.Y2015 as Suicide_Rate label "Suicide_Rate"
         from
             Happiness2015_raw_sorted as A
