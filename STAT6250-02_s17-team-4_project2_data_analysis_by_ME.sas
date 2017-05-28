@@ -28,17 +28,16 @@ and H2015_Health_Suicide;
 * Research Question Analysis Starting Point;
 *******************************************************************************;
 title1
-'Research Question: What are the top 20 happiest countries in 2016?'
+'Research Question: What are the top 20 happiest countries in 2016 and how do they compare with the rest of the countries?'
 ;
 
 title2
-'Rationale: This answers some basics questions about the results of the research.'
+'Rationale: This provides the answer a basic question that one would have regarding the results and the chart gives a visual overview of the happiness scores'
 ;
 
 footnote1
-''
+'The happiness scores are from 0-10 (with zero being the worst and ten being the best). The top three countries (out of 157) in 2016 were Denmark, Switzerland, and Iceland. The United States comes in at 13th.'
 ;
-
 *
 Note: This will use the Country and Happiness_Score from H2016_sorted_by_hscore.
  
@@ -51,6 +50,7 @@ Limitations: These results are from one study which surveyed 157-158 countries
 
 Followup Steps: Look for other data sources.
 ;
+
 proc print data=H2016_sorted_by_hscore(obs=20);
     var country happiness_score;
 	label happiness_score="Happiness Score";
@@ -59,9 +59,14 @@ run;
 title
 'Happiness Scores by Country'
 ;
+footnote
+'No country scored a perfect score of ten nor was there a country with a zero.'
+;
 proc sgplot data=H2016_sorted_by_hscore;
     hbar country / response=happiness_score
-        categoryorder=respdesc;
+        categoryorder=respdesc nostatlabel;
+	xaxis min=0;
+	xaxis max=10;
 run;
 
 title;
@@ -79,7 +84,7 @@ title2
 ;
 
 footnote1
-''
+'The model for predicting the happiness score has an adjusted R-squared of 0.7602. This means that the model accounts for 76% of the variation in the happiness score. The most significant predictors are GDP, Family (having someone to count on in times of trouble), Freedom (perceived freedom to make life decisions), then Life Expectency, and finally Trust (perceived absence of corruption in government and business). Generosity (as measured by recent donations) was found to be not significant to the model and removed.'
 ;
 
 *
@@ -95,10 +100,12 @@ happiness report.
 
 Followup Steps: Re-run the regression with additional independent variables.
 ;
-proc reg data=Happiness_yoy;
-    model happiness_score = GDP family life_exp freedom trust;
+ods graphics off;
+proc reg
+	data=Happiness_yoy;
+    model happiness_score = GDP family life_exp_index freedom trust;
 run;
-
+ods graphics on;
 title;
 footnote;
 
@@ -114,7 +121,7 @@ title2
 ;
 
 footnote1
-''
+'The Pearson Correlation Coefficient between Happiness and Suicide Rate is -0.14787. The p-value is 0.0932. This means that there is no significant correlation between the two variables but the sign does indicate that the correlation is an inverse one'
 ;
 
 *
@@ -148,7 +155,7 @@ title2
 ;
 
 footnote1
-''
+'The Pearson Correlation Coefficient between Happiness and Total Alcohol Consumption Per Capita correlate is 0.31623 and the p-value is 0.0003. This indicates that happier people drink more and vice versa'
 ;
 
 *
@@ -158,10 +165,11 @@ Happiness_Score from WorldHappiness2015.
 Methodology: Use PROC CORR to calculate the correlation between the two 
 variables.
 
-Limitations: The correlation between happiness and alcohol maybe be weak.
+Limitations: The correlation between happiness and alcohol might not indicate
+relationship between the two. For example, it may be that a high GDP results
+in both high alcohol consumption and happiness.
 
-Followup Steps: Try binning the alcohol consumpution into categories (high,
-medium, low)
+Followup Steps: Check the correlation between indepedent variables.
 ;
 proc corr data=H2015_health_suicide plots=matrix(histogram);
     var happiness_score alcohol_consumption;
