@@ -32,7 +32,7 @@ title1
 ;
 
 title2
-'Rationale: This provides the answer a basic question that one would have regarding the results and the chart gives a visual overview of the happiness scores'
+'Rationale: This provides the answer a basic question that one would have regarding the results and the chart gives a visual overview of the happiness scores.'
 ;
 
 footnote1
@@ -121,7 +121,7 @@ title2
 ;
 
 footnote1
-'The Pearson Correlation Coefficient between Happiness and Suicide Rate is -0.14787. The p-value is 0.0932. This means that there is no significant correlation between the two variables but the sign does indicate that the correlation is an inverse one'
+'The Pearson Correlation Coefficient between Happiness and Suicide Rate is -0.14787. The p-value is 0.0932. This means that there is no significant correlation between the two variables but the sign does indicate that the correlation is an inverse one.'
 ;
 
 *
@@ -155,7 +155,7 @@ title2
 ;
 
 footnote1
-'The Pearson Correlation Coefficient between Happiness and Total Alcohol Consumption Per Capita correlate is 0.31623 and the p-value is 0.0003. This indicates that happier people drink more and vice versa'
+'The Pearson Correlation Coefficient between Happiness and Total Alcohol Consumption Per Capita is 0.31623. The p-value is 0.0003 so we can conclude that there is a linear correlation. This indicates that, to some degree, happier people drink more and vice versa.'
 ;
 
 *
