@@ -213,8 +213,7 @@ run;
 
 * Horizontal merge of Happiness 2015, Health Statistics and Suicide Rates 
 on Country name
-NOTE: Life_Exp exists in both Happiness2015 and Health Statistics
-;
+NOTE: Life_Exp exists in both Happiness2015 and Health Statistics;
 proc sql;
     create table H2015_Health_Suicide as
         select 
@@ -235,20 +234,21 @@ quit;
 
 
 *Horizontally merge Happiness2015 and Happiness2016 by country;
-
 data Happiness_yoy_GDP(keep=Country Region GDP_2015 GDP_2016 GDP_increase);
 	merge Happiness2015_raw_sorted(rename=(GDP=GDP_2015))
 		  Happiness2016_raw_sorted(rename=(GDP=GDP_2016))
 	;
 	by country;
-	GDP_increase=(GDP_2016-GDP_2015)/GDP_2015;
+	if GDP_2015 = 0 then
+	    GDP_increase = .;
+	else
+        GDP_increase=(GDP_2016-GDP_2015)/GDP_2015;
 run;
 
 
 
 * Combine hapiness report data vertically into the primary
 key "country";
-
 data happiness_yoy(drop=lower_confidence_interval
 						upper_confidence_interval);
 	retain 
@@ -281,9 +281,8 @@ run;
 
 
 
-*Use proc sort and data step to further make changes
+*Use proc sort and data steps to further make changes
 on the datasets for analysis;
-
 proc sort
     data=Happiness2016_raw_sorted
     out=H2016_sorted_by_hscore;
